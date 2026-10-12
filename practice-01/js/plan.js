@@ -1,50 +1,40 @@
 "use strict";
 
-// Вариант 7
+// ПР1, задание 4. План выполнения задач по дням. Вариант 7.
 const totalTasks = 10;
 const completedTasks = 7;
 const dailyLimit = 3;
 
-const maxTasks = 1000;
-const maxDailyLimit = 1000;
-
-// Проверки количества задач — как в задании 3, затем проверка дневной нормы.
+// Шаг 1. Проверяем данные — так же, как в progress.js, плюс дневную норму.
 if (typeof totalTasks !== "number" || typeof completedTasks !== "number") {
-  console.log("Ошибка: количество задач должно быть числом, а не строкой или другим типом");
-} else if (!Number.isFinite(totalTasks) || !Number.isFinite(completedTasks)) {
-  console.log("Ошибка: недопустимое числовое значение (NaN или Infinity)");
+  console.log("Ошибка: количество задач должно быть числом, а не строкой");
 } else if (!Number.isInteger(totalTasks) || !Number.isInteger(completedTasks)) {
-  console.log("Ошибка: количество задач должно быть целым числом");
-} else if (totalTasks < 0 || completedTasks < 0) {
-  console.log("Ошибка: количество задач не может быть отрицательным");
-} else if (totalTasks > maxTasks) {
-  console.log(`Ошибка: общее количество задач не может превышать ${maxTasks}`);
-} else if (completedTasks > totalTasks) {
-  console.log("Ошибка: выполнено больше задач, чем существует");
-} else if (typeof dailyLimit !== "number") {
-  console.log("Ошибка: дневная норма должна быть числом, а не строкой или другим типом");
-} else if (!Number.isInteger(dailyLimit)) {
-  console.log("Ошибка: дневная норма должна быть целым числом");
-} else if (dailyLimit < 1 || dailyLimit > maxDailyLimit) {
-  console.log(`Ошибка: дневная норма должна быть от 1 до ${maxDailyLimit}`);
+  console.log("Ошибка: количество задач должно быть целым числом (не дробь и не NaN)");
+} else if (totalTasks < 0 || totalTasks > 1000) {
+  console.log("Ошибка: всего задач должно быть от 0 до 1000");
+} else if (completedTasks < 0 || completedTasks > totalTasks) {
+  console.log("Ошибка: выполненных задач должно быть от 0 до общего количества");
+} else if (typeof dailyLimit !== "number" || !Number.isInteger(dailyLimit)) {
+  console.log("Ошибка: дневная норма должна быть целым числом, а не строкой или дробью");
+} else if (dailyLimit < 1 || dailyLimit > 1000) {
+  console.log("Ошибка: дневная норма должна быть от 1 до 1000");
 } else {
+  // Шаг 2. Каждый день делаем не больше нормы и не больше, чем осталось.
   let remainingTasks = totalTasks - completedTasks;
+  let day = 0;
 
   if (remainingTasks === 0) {
     console.log("Все задачи уже выполнены");
-    console.log("Потребуется дней: 0");
   } else {
     console.log(`Осталось задач: ${remainingTasks}`);
-
-    let day = 0;
-    while (remainingTasks > 0) {
-      day += 1;
-      // В последний день выполняем не больше, чем осталось.
-      const tasksToday = Math.min(dailyLimit, remainingTasks);
-      remainingTasks -= tasksToday;
-      console.log(`День ${day}: выполнено ${tasksToday}, осталось ${remainingTasks}`);
-    }
-
-    console.log(`Потребуется дней: ${day}`);
   }
+
+  while (remainingTasks > 0) {
+    day += 1;
+    const tasksToday = Math.min(dailyLimit, remainingTasks);
+    remainingTasks -= tasksToday;
+    console.log(`День ${day}: выполнено ${tasksToday}, осталось ${remainingTasks}`);
+  }
+
+  console.log(`Потребуется дней: ${day}`);
 }
